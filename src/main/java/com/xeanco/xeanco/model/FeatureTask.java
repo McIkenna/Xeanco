@@ -13,20 +13,17 @@ import java.util.Date;
 public class FeatureTask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(updatable = false, insertable = false)
-    private String featureSequence;
-    private String headline;
-    private String summary;
-    private String details;
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.REFRESH)
-    @JoinColumn(name="featureLog_id", updatable = false, nullable = false)
-    @JsonIgnore
-    private FeatureLog featureLog;
-
+    private Long featureTaskId;
     @Column(updatable = false)
     private String featureIdentifier;
+    private String headline;
+    @Column(length=2000)
+    private String summary;
+    @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.REFRESH)
+    @JoinColumn(name = "feature_id", nullable = false)
+    @JsonIgnore
+    private Feature feature;
+
 
     @Lob
     private byte[] image;
@@ -37,21 +34,19 @@ public class FeatureTask {
 
 
     public FeatureTask(
-                        String featureSequence,
-                        FeatureLog featureLog,
+                        Feature feature,
+                        String featureIdentifier,
                         String headline,
                        String summary,
-                       String details,
                        byte[] image,
                        String imageName,
                        String imageType,
                        String downloadUrl
                     ) {
-        this.featureSequence = featureSequence;
-        this.featureLog = featureLog;
+        this.feature = feature;
+        this.featureIdentifier = featureIdentifier;
         this.headline = headline;
         this.summary = summary;
-        this.details = details;
         this.image = image;
         this.imageName = imageName;
         this.imageType = imageType;
@@ -59,7 +54,7 @@ public class FeatureTask {
     }
 
     @PrePersist
-    protected void onCreate(){
+    protected void setCreatedDate(){
         this.createdDate = new Date();
     }
     public String setFeatureTaskDownloadUrl(String downloadUrl){

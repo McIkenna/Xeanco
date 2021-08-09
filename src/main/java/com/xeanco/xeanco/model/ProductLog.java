@@ -13,20 +13,18 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FeatureLog {
+public class ProductLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer FTSequence = 0;
-    private String featureIdentifier;
+    private Integer productSequence = 0;
+    private String productIdentifier;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "feature_id", nullable = false)
+    @JoinColumn(name="product_id", nullable = false)
     @JsonIgnore
-    private Feature feature;
+    private Product product;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "featureLog")
-    private List<FeatureTask> featureTasks = new ArrayList<>();
-
-
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "productLog")
+    private List<ProductTask> productTasks = new ArrayList<>();
 }

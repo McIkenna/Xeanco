@@ -6,5 +6,5 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public interface IFeatureTaskService {
-    FeatureTask saveOrUpdate(MultipartFile file, String featuredId, FeatureTask featureTask);
+    FeatureTask save(MultipartFile file, String featuredId, FeatureTask featureTask);
 }

@@ -21,17 +21,26 @@ public class FeatureTaskController {
     FeatureTaskService featureTaskService;
     @Autowired
     ErrorHandlerService errorHandlerService;
-
-    @PostMapping("/{featureId}")
-    public ResponseEntity<?> saveFeature(@RequestParam MultipartFile file, FeatureTask featureTask, @PathVariable String featureId,  BindingResult result){
+/*
+    @PostMapping("/{featureLogId}")
+    public ResponseEntity<?> saveFeature(@RequestParam MultipartFile file, FeatureTask featureTask, @PathVariable String featureLogId, BindingResult result){
         ResponseEntity<?> errorMap = errorHandlerService.ErrorHandlerService(result);
         if(errorMap != null){
             return errorMap;
         }
-        FeatureTask featureTask1 = featureTaskService.saveOrUpdate(file, featureId, featureTask);
+        FeatureTask featureTask1 = featureTaskService.save(file, featureLogId, featureTask);
         return new ResponseEntity<FeatureTask>(featureTask1, HttpStatus.CREATED);
     }
-
+*/
+    @PutMapping("/update")
+    public ResponseEntity<?> saveFeature(@RequestParam MultipartFile file, FeatureTask featureTask, BindingResult result){
+        ResponseEntity<?> errorMap = errorHandlerService.ErrorHandlerService(result);
+        if(errorMap != null){
+            return errorMap;
+        }
+        FeatureTask featureTask1 = featureTaskService.update(file, featureTask);
+        return new ResponseEntity<FeatureTask>(featureTask1, HttpStatus.CREATED);
+    }
     @GetMapping("/{id}")
     public ResponseEntity<?> getFeatureById(@PathVariable String id){
         FeatureTask task2 = featureTaskService.getFeatureTask(id);

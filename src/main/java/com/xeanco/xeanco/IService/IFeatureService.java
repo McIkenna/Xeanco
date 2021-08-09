@@ -7,5 +7,5 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public interface IFeatureService {
 
-    Feature saveOrUpdate(MultipartFile file, Feature feature);
+    Feature save(MultipartFile file, Feature feature);
 }

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @NoArgsConstructor
@@ -11,16 +12,19 @@ import javax.persistence.*;
 public class Feature {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long featureId;
     @Column(updatable = false, unique = true)
     private String featureIdentifier;
+    @NotBlank(message = "Feature Title cannot be empty")
     private String featureHeading;
+    @Column(length = 1000)
     private String featureSubHeading;
-    @Column(length = 500)
+    @Column(length = 2000)
+    @NotBlank(message = "Feature Body cannot be empty")
     private String featureDescription;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "feature")
-    private FeatureLog featureLog;
+    private FeatureTask featureTask;
 
     @Lob
     private byte[] featureImage;
@@ -30,7 +34,7 @@ public class Feature {
 
 
     public Feature(
-                    String featureHeading,
+                   String featureHeading,
                    String featureSubHeading,
                    String featureDescription,
                    byte[] featureImage,
@@ -50,4 +54,10 @@ public class Feature {
         this.featureDownloadUrl = featureDownloadUrl;
         return featureDownloadUrl;
     }
+/*
+    UUID newId = UUID.randomUUID();
+
+    public void setFeatureIdentifier (){
+        this.featureIdentifier = newId.toString();
+    }*/
 }

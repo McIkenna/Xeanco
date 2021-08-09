@@ -28,13 +28,23 @@ public class FeatureController {
         if(errorMap != null){
             return errorMap;
         }
-        Feature feature1 = featureService.saveOrUpdate(file, feature);
+        Feature feature1 = featureService.save(file, feature);
+        return new ResponseEntity<Feature>(feature1, HttpStatus.CREATED);
+    }
+
+    @PutMapping("")
+    public ResponseEntity<?> updateFeature(@RequestParam MultipartFile file, Feature feature, BindingResult result){
+        ResponseEntity<?> errorMap = errorHandlerService.ErrorHandlerService(result);
+        if(errorMap != null){
+            return errorMap;
+        }
+        Feature feature1 = featureService.update(file, feature);
         return new ResponseEntity<Feature>(feature1, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getFeatureById(@PathVariable String id){
-        Feature feature2 = featureService.findFeatureById(id);
+    public ResponseEntity<?> getFeatureByIdentifier(@PathVariable String id){
+        Feature feature2 = featureService.findFeatureByIdentifier(id);
         return new ResponseEntity<Feature>(feature2, HttpStatus.OK);
     }
 
@@ -45,7 +55,7 @@ public class FeatureController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAbout(@PathVariable String id){
-        featureService.deleteFeatureById(id);
+        featureService.deleteFeatureByIdentifier(id);
         return new ResponseEntity<String>("User with ID: " + id + " was deleted", HttpStatus.OK);
     }
 }

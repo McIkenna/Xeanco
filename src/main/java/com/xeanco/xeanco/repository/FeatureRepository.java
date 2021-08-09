@@ -6,7 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FeatureRepository extends CrudRepository<Feature, Long> {
-        Feature findByFeatureIdentifier(String featureId);
+
+        Feature findByFeatureIdentifier(String id);
 
         @Override
         Iterable<Feature> findAll();
