@@ -127,7 +127,7 @@ public class FeatureService implements IFeatureService {
             feature.setFeatureImageType(featureType);
             feature.setFeatureDownloadUrl(downloadUrl);
             feature.setFeatureImage(file.getBytes());
-            
+
 
             return featureRepository.save(feature);
         }catch (Exception e){

@@ -44,9 +44,9 @@ public class ProductController {
         return productService.findAllProduct();
     }
 
-    @DeleteMapping("/{productId}")
+    @DeleteMapping("/{productIdentifier}")
     public ResponseEntity<?> deleteProductById(@PathVariable String productIdentifier){
-        productService.DeleteProductByIdentifier(productIdentifier);
+        productService.deleteProductByIdentifier(productIdentifier);
         return  new ResponseEntity<String>("User with ID: " + productIdentifier + " was deleted", HttpStatus.OK);
     }
 

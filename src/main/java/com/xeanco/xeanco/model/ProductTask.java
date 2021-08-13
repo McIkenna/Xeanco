@@ -1,6 +1,7 @@
 package com.xeanco.xeanco.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,13 +11,14 @@ import java.util.Date;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class ProductTask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(updatable = false)
     private String productIdentifier;
-    @Column(updatable = false, insertable = false)
+    @Column(updatable = false)
     private String productSequence;
     private String productTskName;
     @Column(length=500)
@@ -34,24 +36,6 @@ public class ProductTask {
     private String productTskImgType;
     private String productTskDownloadUrl;
     private Date createdDate;
-
-    public ProductTask(String productSequence,
-                       String productTskName,
-                       String productTskSummary,
-                       String productTskDetail,
-                       byte[] productTskImg,
-                       String productTskImgName,
-                       String productTskImgType,
-                       String productTskDownloadUrl) {
-        this.productSequence = productSequence;
-        this.productTskName = productTskName;
-        this.productTskSummary = productTskSummary;
-        this.productTskDetail = productTskDetail;
-        this.productTskImg = productTskImg;
-        this.productTskImgName = productTskImgName;
-        this.productTskImgType = productTskImgType;
-        this.productTskDownloadUrl = productTskDownloadUrl;
-    }
 
     @PrePersist
     protected void setCreatedDate(){

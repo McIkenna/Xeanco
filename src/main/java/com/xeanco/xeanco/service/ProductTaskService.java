@@ -2,9 +2,11 @@ package com.xeanco.xeanco.service;
 
 import com.xeanco.xeanco.IService.IProductTaskService;
 import com.xeanco.xeanco.exception.IntroException;
+import com.xeanco.xeanco.model.Product;
 import com.xeanco.xeanco.model.ProductLog;
 import com.xeanco.xeanco.model.ProductTask;
 import com.xeanco.xeanco.repository.ProductLogRepository;
+import com.xeanco.xeanco.repository.ProductRepository;
 import com.xeanco.xeanco.repository.ProductTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,18 +21,20 @@ public class ProductTaskService implements IProductTaskService {
     @Autowired
     ProductLogRepository productLogRepository;
 
+    @Autowired
+    ProductRepository productRepository;
+
     @Override
     public ProductTask saveOrUpdate(MultipartFile file, String productIdentifier, ProductTask productTask) {
-        ProductLog productLog = productLogRepository.findByProductIdentifier(productIdentifier);
-        productTask.setProductLog(productLog);
-
-        Integer productLogSequence = productLog.getProductSequence();
-        productLogSequence++;
         try{
+            ProductLog productLog = productLogRepository.findByProductIdentifier(productIdentifier);
+            productTask.setProductLog(productLog);
+            Integer ProductLogSequence = productLog.getProductSequence();
+            ProductLogSequence++;
+            productLog.setProductSequence(ProductLogSequence);
             productTask.setProductTskImg(file.getBytes());
             productTask.setProductTskImgName(file.getOriginalFilename());
             productTask.setProductTskImgType(file.getContentType());
-            productTask.setProductSequence(productLogSequence.toString());
             productTask.setProductTskName(productLog.getProduct().getProductName());
             productTask.setProductTskSummary(productLog.getProduct().getProductSummary());
             String downloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -38,7 +42,7 @@ public class ProductTaskService implements IProductTaskService {
                     .path(productTask.getProductTskImgName())
                     .toUriString();
             productTask.setProductTskDownloadUrl(downloadUri);
-            productTask.setProductSequence(productIdentifier + "-" + productLogSequence);
+            productTask.setProductSequence(productLog.getProductIdentifier() + "-" + ProductLogSequence);
             productTask.setProductIdentifier(productIdentifier);
 
             return productTaskRepository.save(productTask);
@@ -48,12 +52,48 @@ public class ProductTaskService implements IProductTaskService {
         }
     }
 
-    public ProductTask getProductById(String id){
-        ProductTask task2 = productTaskRepository.findByProductIdentifier(id.toUpperCase());
-        if(task2 == null){
+    public Iterable<ProductTask> getProductById(String id){
+        Product product = productRepository.findByProductIdentifier(id);
+        if(product == null){
             throw new IntroException("ProductTask ID: " + id + " Does not exist");
         }
-        return task2;
+        return productTaskRepository.findByProductIdentifier(id);
     }
 
-}
+    public ProductTask findPTByProductSequence(String productlog_id, String pt_id) {
+
+        //make sure we are searching on an existing backlog
+        ProductLog productLog = productLogRepository.findByProductIdentifier(productlog_id);
+        if (productLog == null) {
+            throw new IntroException("Product with ID: '" + productLog + "' does not exist");
+        }
+
+        //make sure that our task exists
+        ProductTask productTask = productTaskRepository.findByProductSequence(pt_id);
+
+        if (productTask == null) {
+            throw new IntroException("Project Task '" + pt_id + "' not found");
+        }
+
+        //make sure that the backlog/project id in the path corresponds to the right project
+        if (!productTask.getProductIdentifier().equals(productlog_id)) {
+            throw new IntroException("Project Task '" + pt_id + "' does not exist in project: '" + productlog_id);
+        }
+        return productTask;
+    }
+
+    public ProductTask updateByProductSequence(ProductTask updatedTask, String backlog_id, String pt_id){
+        ProductTask productTask = findPTByProductSequence(backlog_id, pt_id);
+
+        productTask = updatedTask;
+
+        return productTaskRepository.save(productTask);
+    }
+
+
+    public void deletePTByProductSequence(String backlog_id, String pt_id){
+        ProductTask productTask = findPTByProductSequence(backlog_id, pt_id);
+        productTaskRepository.delete(productTask);
+    }
+
+    }

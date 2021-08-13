@@ -19,7 +19,6 @@ public class ProductLog {
     private Long id;
     private Integer productSequence = 0;
     private String productIdentifier;
-
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="product_id", nullable = false)
     @JsonIgnore

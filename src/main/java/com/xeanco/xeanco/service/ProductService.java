@@ -43,9 +43,9 @@ public class ProductService implements IProductService {
                 ProductLog productLog = new ProductLog();
                 product1.setProductLog(productLog);
                 productLog.setProduct(product1);
-                productLog.setProductIdentifier(product1.getProductIdentifier().toUpperCase());
+                productLog.setProductIdentifier(product1.getProductIdentifier());
             }if(product1.getId() != null){
-                product1.setProductLog(productLogRepository.findByProductIdentifier(product1.getProductIdentifier().toUpperCase()));
+                product1.setProductLog(productLogRepository.findByProductIdentifier(product1.getProductIdentifier()));
             }
             return productRepository.save(product1);
 
@@ -67,8 +67,8 @@ public class ProductService implements IProductService {
         return productRepository.findAll();
     }
 
-    public void DeleteProductByIdentifier(String productIdentifier){
-        Product prod = productRepository.findByProductIdentifier(productIdentifier.toUpperCase());
+    public void deleteProductByIdentifier(String productIdentifier){
+        Product prod = productRepository.findByProductIdentifier(productIdentifier);
         if(prod == null ){
             throw new IntroException("Product with ID: " + productIdentifier + " Does not exist");
         }

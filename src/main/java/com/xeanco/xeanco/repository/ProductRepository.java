@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Long> {
     Product findByProductIdentifier(String productIdentifier);
+    @Override
     Iterable<Product> findAll();
 }
