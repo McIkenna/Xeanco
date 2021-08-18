@@ -15,7 +15,9 @@ public class About {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
     private String aboutName;
-    private String aboutSubHeading;
+    private String aboutHeading;
     @Column(length = 1000)
+    private String aboutSubHeading;
+    @Column(length = 3000)
     private String aboutDescription;
 }

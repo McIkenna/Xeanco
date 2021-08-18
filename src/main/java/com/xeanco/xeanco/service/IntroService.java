@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.List;
+
 
 @Service
 public class IntroService implements IIntroService {
@@ -51,5 +53,31 @@ public class IntroService implements IIntroService {
             throw new IntroException("Intro with Id" + id + "Does not exist");
         }
         introRepository.delete(intro);
+    }
+
+    public List<Intro> findAllIntro(){
+        return introRepository.findAll();
+    }
+
+
+    public Intro Update(MultipartFile file, Intro intro) {
+        String imageName = file.getOriginalFilename();
+        String imageType=file.getContentType();
+        String downloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFile/")
+                .path(imageName)
+                .toUriString();
+        String downloadUrl = intro.setImageDownloadUrl(downloadUri);
+
+        try{
+            intro.setImageName(imageName);
+            intro.setImageType(imageType);
+            intro.setImageDownloadUrl(downloadUrl);
+            intro.setImage(file.getBytes());
+            return introRepository.save(intro);
+        }catch(Exception e){
+            throw new IntroException("IntroName '" + intro.getIntroName() + "Already exist");
+        }
+
     }
 }

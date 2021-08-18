@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Intro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     private String introName;
     @Column(length=500)
     private String introDescription;
