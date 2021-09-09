@@ -50,4 +50,13 @@ public class ProductController {
         return  new ResponseEntity<String>("User with ID: " + productIdentifier + " was deleted", HttpStatus.OK);
     }
 
+    @PutMapping("")
+    public ResponseEntity<?> updateProduct(@RequestParam MultipartFile file, Product product,  BindingResult result){
+        ResponseEntity<?> errorMap = errorHandlerService.ErrorHandlerService(result);
+        if(errorMap != null){
+            return errorMap;
+        }
+        Product prod1 = productService.updateProduct(file, product);
+        return new ResponseEntity<Product> (prod1, HttpStatus.CREATED);
+    }
 }

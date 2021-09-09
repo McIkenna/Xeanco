@@ -75,5 +75,25 @@ public class ProductService implements IProductService {
         productRepository.delete(prod);
     }
 
+    public Product updateProduct(MultipartFile file, Product product) {
+
+        String productImgName = file.getOriginalFilename();
+        String productImgType = file.getContentType();
+        String downloadUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFile")
+                .path(productImgName)
+                .toUriString();
+        String productDownloadUrl = product.setProductDownloadUrl(downloadUrl);
+        try{
+            product.setProductImgName(productImgName);
+            product.setProductDownloadUrl(productDownloadUrl);
+            product.setProductImgType(productImgType);
+            product.setProductImg(file.getBytes());
+            return productRepository.save(product);
+
+        }catch(Exception e){
+            throw new  IntroException(e.getLocalizedMessage());
+        }
+    }
 
 }

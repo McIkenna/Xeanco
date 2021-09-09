@@ -1,17 +1,17 @@
 package com.xeanco.xeanco.repository;
 
-import com.xeanco.xeanco.model.Clients;
+import com.xeanco.xeanco.model.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface ClientRepository extends JpaRepository<Clients, Long> {
+public interface ClientRepository extends JpaRepository<Client, Long> {
 
-    Clients findById(long id);
+    Client findById(long id);
 
     @Override
-    List<Clients> findAll();
+    List<Client> findAll();
 
 }

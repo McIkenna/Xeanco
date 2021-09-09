@@ -1,6 +1,6 @@
 package com.xeanco.xeanco.controller;
 
-import com.xeanco.xeanco.model.Clients;
+import com.xeanco.xeanco.model.Client;
 import com.xeanco.xeanco.response.Response;
 import com.xeanco.xeanco.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +21,11 @@ public class ClientController {
     @Autowired
     ClientService clientService;
 
-    public Response save(@RequestParam MultipartFile file, Clients clients){
-        Clients clients1 = clientService.save(file, clients);
+    @PostMapping("")
+    public Response save(@RequestParam MultipartFile file, Client client){
+        Client client1 = clientService.save(file, client);
         Response response = new Response();
-        if(clients.getId() != null){
+        if(client1 != null){
             response.setMessage("Intro Save Successfully");
             return response;
         }
@@ -34,18 +35,18 @@ public class ClientController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable long id){
-        Clients client1 = clientService.findClientsById(id);
-        return new ResponseEntity<Clients>(client1, HttpStatus.OK);
+        Client client1 = clientService.findClientsById(id);
+        return new ResponseEntity<Client>(client1, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(long id){
+    public ResponseEntity<?> deleteById(@PathVariable long id){
         clientService.deleteById(id);
         return  new ResponseEntity<String>("Clients with ID: " + id + " was deleted", HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public List<Clients> getAllClients(){
+    public List<Client> getAllClients(){
         return clientService.findAllClients();
     }
 }

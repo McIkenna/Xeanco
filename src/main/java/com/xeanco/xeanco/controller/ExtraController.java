@@ -1,6 +1,6 @@
 package com.xeanco.xeanco.controller;
 
-import com.xeanco.xeanco.model.Extras;
+import com.xeanco.xeanco.model.Extra;
 import com.xeanco.xeanco.service.ErrorHandlerService;
 import com.xeanco.xeanco.service.ExtraService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,22 +23,27 @@ public class ExtraController {
     @Autowired
     ExtraService extraService;
     @PostMapping("")
-    public ResponseEntity<?> saveExtras(@RequestParam MultipartFile[] files, Extras extra, BindingResult result){
+    public ResponseEntity<?> saveExtras(@RequestParam MultipartFile file1,
+                                        @RequestParam MultipartFile file2,
+                                        @RequestParam MultipartFile file3,
+                                        @RequestParam MultipartFile file4,
+                                        Extra extra,
+                                        BindingResult result){
         ResponseEntity<?> errorMap = errorHandlerService.ErrorHandlerService(result);
         if(errorMap != null){
             return errorMap;
         }
-        Extras extra1 = extraService.save(files, extra);
-        return new ResponseEntity<Extras>(extra1, HttpStatus.CREATED);
+        Extra extra1 = extraService.save(file1,file2, file3, file4, extra);
+        return new ResponseEntity<Extra>(extra1, HttpStatus.CREATED);
     }
     @GetMapping("/{id}")
     public ResponseEntity<?> getExtrasById(@PathVariable long id){
-        Extras extra = extraService.findExtraById(id);
-        return new ResponseEntity<Extras>(extra, HttpStatus.OK);
+        Extra extra = extraService.findExtraById(id);
+        return new ResponseEntity<Extra>(extra, HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public List<Extras> getAllExtras(){
+    public List<Extra> getAllExtras(){
         return extraService.findAllExtra();
     }
 

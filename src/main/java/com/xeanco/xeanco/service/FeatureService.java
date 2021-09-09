@@ -112,7 +112,6 @@ public class FeatureService implements IFeatureService {
      */
 
     public Feature update(MultipartFile file, Feature feature) {
-
         String featureImageName = file.getOriginalFilename();
         String featureType = file.getContentType();
         String downloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -121,8 +120,6 @@ public class FeatureService implements IFeatureService {
                 .toUriString();
         String downloadUrl = feature.setFeatureDownloadUrl(downloadUri);
         try{
-
-
             feature.setFeatureImageName(featureImageName);
             feature.setFeatureImageType(featureType);
             feature.setFeatureDownloadUrl(downloadUrl);

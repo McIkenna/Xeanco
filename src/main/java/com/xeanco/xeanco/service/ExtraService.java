@@ -2,7 +2,7 @@ package com.xeanco.xeanco.service;
 
 import com.xeanco.xeanco.IService.IExtraService;
 import com.xeanco.xeanco.exception.IntroException;
-import com.xeanco.xeanco.model.Extras;
+import com.xeanco.xeanco.model.Extra;
 import com.xeanco.xeanco.repository.ExtrasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,48 +16,37 @@ public class ExtraService implements IExtraService {
 
     @Autowired
     ExtrasRepository extrasRepository;
-    public static String uploadDirectory = System.getProperty("user.dir")+"/uploads";
+    //public static String uploadDirectory = System.getProperty("user.dir")+"/uploads";
     @Override
-    public Extras save(MultipartFile[] files, Extras extras) {
+    public Extra save(MultipartFile file1, MultipartFile file2, MultipartFile file3, MultipartFile file4,  Extra extra) {
         //StringBuilder fileNames = new StringBuilder();
-        int count =0;
         try{
-        for(MultipartFile file: files) {
-            String fileName = file.getOriginalFilename();
             //Path fileNameAndPath = Paths.get(uploadDirectory, file.getOriginalFilename());
             // fileNames.append(file.getOriginalFilename()+" ");
+                extra.setImgName1(file1.getOriginalFilename());
+                extra.setImg1(file1.getBytes());
 
-            if (count == 0) {
-                extras.setImgName1(fileName);
-                extras.setImg1(file.getBytes());
-            }
-            if (count == 1) {
-                extras.setImgName2(fileName);
-                extras.setImg2(file.getBytes());
-            }
-            if (count == 2) {
-                extras.setImgName3(fileName);
-                extras.setImg3(file.getBytes());
-            }
-            if (count == 3) {
-                extras.setImgName4(fileName);
-                extras.setImg4(file.getBytes());
-            }
-            count++;
-        }
-            return extrasRepository.save(extras);
+                extra.setImgName2(file2.getOriginalFilename());
+                extra.setImg2(file2.getBytes());
+
+                extra.setImgName3(file3.getOriginalFilename());
+                extra.setImg3(file3.getBytes());
+
+                extra.setImgName4(file4.getOriginalFilename());
+                extra.setImg4(file4.getBytes());
+                return extrasRepository.save(extra);
         }catch (IOException ex){
                 throw new IntroException("Feature ID ' already exists");
             }
     }
 
 
-    public List<Extras> findAllExtra(){
+    public List<Extra> findAllExtra(){
         return extrasRepository.findAll();
     }
 
-    public Extras findExtraById(long id){
-        Extras extra = extrasRepository.findById(id);
+    public Extra findExtraById(long id){
+        Extra extra = extrasRepository.findById(id);
         if(extra == null){
             throw new IntroException("Extra with Id: "+ id + " Does not exist");
         }
@@ -65,7 +54,7 @@ public class ExtraService implements IExtraService {
     }
 
     public void deleteById(long id){
-        Extras extra = extrasRepository.findById(id);
+        Extra extra = extrasRepository.findById(id);
         if(extra == null){
             throw new IntroException("Extra with Id: "+ id + " Does not exist");
         }

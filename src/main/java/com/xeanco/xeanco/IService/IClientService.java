@@ -1,10 +1,10 @@
 package com.xeanco.xeanco.IService;
 
-import com.xeanco.xeanco.model.Clients;
+import com.xeanco.xeanco.model.Client;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public interface IClientService {
-    Clients save(MultipartFile file, Clients clients);
+    Client save(MultipartFile file, Client client);
 }
