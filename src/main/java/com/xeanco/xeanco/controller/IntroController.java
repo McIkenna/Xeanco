@@ -11,10 +11,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/intro")
+@RequestMapping("")
 @CrossOrigin
 @SpringBootApplication
 public class IntroController {
@@ -22,8 +23,8 @@ public class IntroController {
     @Autowired
     IntroService introService;
 
-    @PostMapping("")
-    public Response save(@RequestParam MultipartFile file, Intro intro){
+    @PostMapping("admin/intro")
+    public Response save(@Valid @RequestParam MultipartFile file, Intro intro){
         Intro intro1 = introService.saveOrUpdate(file, intro);
         Response response = new Response();
         if(intro1 != null){
@@ -34,14 +35,14 @@ public class IntroController {
         return response;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("api/intro/{id}")
     public ResponseEntity<?> findById(@PathVariable long id){
         Intro intro2 = introService.findIntroById(id);
         return new ResponseEntity<Intro>(intro2, HttpStatus.OK);
     }
 
-    @PutMapping("")
-    public Response updateFeature(@RequestParam MultipartFile file, Intro intro, BindingResult result){
+    @PutMapping("admin/intro")
+    public Response updateFeature(@Valid @RequestParam MultipartFile file, Intro intro, BindingResult result){
         Intro intro1 = introService.Update(file, intro);
         Response response = new Response();
         if(intro1 != null){
@@ -52,13 +53,13 @@ public class IntroController {
         return response;
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("admin/intro/{id}")
     public ResponseEntity<?> deleteById(@PathVariable long id){
          introService.deleteInfoById(id);
         return  new ResponseEntity<String>("User with ID: " + id + " was deleted", HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping("api/intro/all")
     public List<Intro> getAllIntros(){
         return introService.findAllIntro();
     }

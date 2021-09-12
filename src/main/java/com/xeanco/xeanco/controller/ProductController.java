@@ -12,8 +12,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+
 @RestController
-@RequestMapping("api/product")
+@RequestMapping("")
 @CrossOrigin
 @SpringBootApplication
 public class ProductController {
@@ -23,8 +25,8 @@ public class ProductController {
     @Autowired
     ErrorHandlerService errorHandlerService;
 
-    @PostMapping("")
-    public ResponseEntity<?> saveProduct(@RequestParam MultipartFile file, Product product,  BindingResult result){
+    @PostMapping("admin/product")
+    public ResponseEntity<?> saveProduct(@Valid @RequestParam MultipartFile file, Product product, BindingResult result){
             ResponseEntity<?> errorMap = errorHandlerService.ErrorHandlerService(result);
             if(errorMap != null){
                 return errorMap;
@@ -33,13 +35,13 @@ public class ProductController {
             return new ResponseEntity<Product> (prod1, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{productIdentifier}")
+    @GetMapping("api/product/{productIdentifier}")
     public ResponseEntity<?> getProductById(@PathVariable String productIdentifier){
         Product product2 = productService.findByProductIdentifier(productIdentifier);
         return new ResponseEntity<Product>(product2, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping("api/product/all")
     public Iterable<Product> getAllProduct(){
         return productService.findAllProduct();
     }
@@ -50,7 +52,7 @@ public class ProductController {
         return  new ResponseEntity<String>("User with ID: " + productIdentifier + " was deleted", HttpStatus.OK);
     }
 
-    @PutMapping("")
+    @PutMapping("admin/product")
     public ResponseEntity<?> updateProduct(@RequestParam MultipartFile file, Product product,  BindingResult result){
         ResponseEntity<?> errorMap = errorHandlerService.ErrorHandlerService(result);
         if(errorMap != null){

@@ -10,10 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/client")
+@RequestMapping("")
 @CrossOrigin
 @SpringBootApplication
 public class ClientController {
@@ -21,8 +22,8 @@ public class ClientController {
     @Autowired
     ClientService clientService;
 
-    @PostMapping("")
-    public Response save(@RequestParam MultipartFile file, Client client){
+    @PostMapping("admin/client")
+    public Response save(@Valid @RequestParam MultipartFile file, Client client){
         Client client1 = clientService.save(file, client);
         Response response = new Response();
         if(client1 != null){
@@ -33,19 +34,19 @@ public class ClientController {
         return response;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("api/client/{id}")
     public ResponseEntity<?> findById(@PathVariable long id){
         Client client1 = clientService.findClientsById(id);
         return new ResponseEntity<Client>(client1, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("admin/client/{id}")
     public ResponseEntity<?> deleteById(@PathVariable long id){
         clientService.deleteById(id);
         return  new ResponseEntity<String>("Clients with ID: " + id + " was deleted", HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping("api/client/all")
     public List<Client> getAllClients(){
         return clientService.findAllClients();
     }

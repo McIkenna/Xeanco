@@ -82,12 +82,27 @@ public class ProductTaskService implements IProductTaskService {
         return productTask;
     }
 
-    public ProductTask updateByProductSequence(ProductTask updatedTask, String backlog_id, String pt_id){
-        ProductTask productTask = findPTByProductSequence(backlog_id, pt_id);
+    public ProductTask updateByProductSequence(MultipartFile file, ProductTask updatedTask, String backlog_id, String pt_id){
 
-        productTask = updatedTask;
 
-        return productTaskRepository.save(productTask);
+        updatedTask.setProductTskImgName(file.getOriginalFilename());
+        updatedTask.setProductTskImgType(file.getContentType());
+        String downloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadProductTask/")
+                .path(updatedTask.getProductTskImgName())
+                .toUriString();
+        updatedTask.setProductTskDownloadUrl(downloadUri);
+        try{
+            updatedTask.setProductTskImg(file.getBytes());
+            ProductTask productTask = findPTByProductSequence(backlog_id, pt_id);
+
+            productTask = updatedTask;
+
+            return productTaskRepository.save(productTask);
+        }catch(Exception e){
+            throw new  IntroException(e.getLocalizedMessage());
+        }
+
     }
 
 

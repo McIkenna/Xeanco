@@ -11,19 +11,20 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @SpringBootApplication
 @CrossOrigin
-@RequestMapping("api/extra")
+@RequestMapping("")
 public class ExtraController {
     @Autowired
     ErrorHandlerService errorHandlerService;
     @Autowired
     ExtraService extraService;
-    @PostMapping("")
-    public ResponseEntity<?> saveExtras(@RequestParam MultipartFile file1,
+    @PostMapping("admin/extra")
+    public ResponseEntity<?> saveExtras(@Valid  @RequestParam MultipartFile file1,
                                         @RequestParam MultipartFile file2,
                                         @RequestParam MultipartFile file3,
                                         @RequestParam MultipartFile file4,
@@ -36,18 +37,18 @@ public class ExtraController {
         Extra extra1 = extraService.save(file1,file2, file3, file4, extra);
         return new ResponseEntity<Extra>(extra1, HttpStatus.CREATED);
     }
-    @GetMapping("/{id}")
+    @GetMapping("api/extra/{id}")
     public ResponseEntity<?> getExtrasById(@PathVariable long id){
         Extra extra = extraService.findExtraById(id);
         return new ResponseEntity<Extra>(extra, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping("api/extra/all")
     public List<Extra> getAllExtras(){
         return extraService.findAllExtra();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("admin/extra/{id}")
     public ResponseEntity<?> deleteExtra(@PathVariable long id){
         extraService.deleteById(id);
         return new ResponseEntity<String>("Extra with ID: " + id + " was deleted", HttpStatus.OK);

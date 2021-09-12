@@ -11,8 +11,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+
 @RestController
-@RequestMapping("api/task")
+@RequestMapping("")
 @CrossOrigin
 @SpringBootApplication
 public class FeatureTaskController {
@@ -32,8 +34,8 @@ public class FeatureTaskController {
         return new ResponseEntity<FeatureTask>(featureTask1, HttpStatus.CREATED);
     }
 */
-    @PutMapping("/update")
-    public ResponseEntity<?> saveFeature(@RequestParam MultipartFile file, FeatureTask featureTask, BindingResult result){
+    @PutMapping("admin/featureTask/update")
+    public ResponseEntity<?> saveFeature(@Valid @RequestParam MultipartFile file, FeatureTask featureTask, BindingResult result){
         ResponseEntity<?> errorMap = errorHandlerService.ErrorHandlerService(result);
         if(errorMap != null){
             return errorMap;
@@ -41,7 +43,7 @@ public class FeatureTaskController {
         FeatureTask featureTask1 = featureTaskService.update(file, featureTask);
         return new ResponseEntity<FeatureTask>(featureTask1, HttpStatus.CREATED);
     }
-    @GetMapping("/{id}")
+    @GetMapping("api/task/{id}")
     public ResponseEntity<?> getFeatureById(@PathVariable String id){
         FeatureTask task2 = featureTaskService.getFeatureTask(id);
         return new ResponseEntity<FeatureTask>(task2, HttpStatus.OK);
