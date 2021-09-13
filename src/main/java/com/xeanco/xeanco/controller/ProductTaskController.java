@@ -68,4 +68,9 @@ public class ProductTaskController {
         return new ResponseEntity<String>("Product Task "+pt_id+" was deleted successfully", HttpStatus.OK);
     }
 
+    @GetMapping("api/productTask/all")
+    public Iterable<ProductTask> getAllProductTask(){
+        return productTaskService.getAllProductTask();
+
+    }
 }

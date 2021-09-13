@@ -111,4 +111,8 @@ public class ProductTaskService implements IProductTaskService {
         productTaskRepository.delete(productTask);
     }
 
+    public Iterable<ProductTask> getAllProductTask(){
+        return productTaskRepository.findAll();
+    }
+
     }

@@ -42,7 +42,7 @@ public class UserController {
         return ResponseEntity.ok().body(appUserService.getUsers());
     }
 
-    @PostMapping("api/register")
+    @PostMapping("admin/register")
     public ResponseEntity<?>saveUsers(@Valid @RequestBody AppUser appUser, BindingResult result){
         //Validate password Match
         userValidator.validate(appUser, result);

@@ -55,7 +55,7 @@ public class FeatureController {
         return featureService.findAllFeature();
     }
 
-    @DeleteMapping("api/admin/{id}")
+    @DeleteMapping("admin/feature/{id}")
     public ResponseEntity<?> deleteAbout(@PathVariable String id){
         featureService.deleteFeatureByIdentifier(id);
         return new ResponseEntity<String>("User with ID: " + id + " was deleted", HttpStatus.OK);
